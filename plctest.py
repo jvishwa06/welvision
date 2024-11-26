@@ -2,10 +2,8 @@ from ultralytics import YOLO
 import snap7
 from snap7.util import set_bool
 import cv2
-import time
 
-model = YOLO("best.pt")  
-model.to('cuda')
+model = YOLO("yolov11.pt")  
 # Connect to PLC
 plc = snap7.client.Client()
 plc.connect("192.168.0.1", 0, 1)  
@@ -32,7 +30,7 @@ while True:
             ret, frame = cap.read()  
             if ret:
                 print("Frame captured, analyzing...")
-                results = model.predict(frame,device=0)
+                results = model.predict(frame,conf=0.8)
                 defect_detected = False
 
                 for result in results[0].boxes.data:
